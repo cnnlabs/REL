@@ -17,9 +17,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/informagi/REL",
     packages=setuptools.find_packages(),
-    data_files=[
-        ('models', ['REL/models/models.json'])
-    ],
+    data_files=[("models", ["REL/models/models.json"])],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
