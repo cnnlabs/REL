@@ -8,8 +8,8 @@ MKFILE_DIR  := $(realpath $(dir $(MKFILE_PATH)))
 
 # Executables and default options
 PYTHON    ?= python3
-PIP       ?= pip3
-VENV      ?= virtualenv
+PIP       ?= $(PYTHON) -m pip
+VENV      ?= $(PYTHON) -m virtualenv
 PIP_OPTS  ?=
 VENV_OPTS ?=
 
