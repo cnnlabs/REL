@@ -18,32 +18,29 @@ VENVDIR ?= venv
 
 # Virtualenv enabled by default, set to 0 to disable
 WITH_VENV ?= 1
-
-# Create and activate virtualenv
 ifneq (0, $(WITH_VENV))
-VENVACTIVATE := [[ ! -d $(VENVDIR) ]] && $(VENV) $(VENV_OPTS) $(VENVDIR) || true; \
-	source $(VENVDIR)/bin/activate;
+VENVACTIVATE := test -d $(VENVDIR) || $(VENV) $(VENV_OPTS) $(VENVDIR); source $(VENVDIR)/bin/activate;
 endif
 
 ###########
 # TARGETS #
 ###########
 
-.PHONY: install
-install:
+.PHONY: deps clean clean-pycache clean-venv cleanall
+
+deps:
 	@$(VENVACTIVATE) $(PIP) $(PIP_OPTS) install -r requirements.txt
 
-.PHONY: clean
-clean:
-	@rm -rf build dist REL.egg-info
+build:
+	@$(VENVACTIVATE) $(PYTHON) setup.py sdist bdist_wheel
 
-.PHONY: clean-venv
+clean:
+	@rm -rf build dist *.egg-info
+
+clean-pycache:
+	@find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
+
 clean-venv:
 	@rm -rf $(VENVDIR)
 
-.PHONY: cleanall
-cleanall: clean clean-venv
-
-.PHONY: package
-package:
-	@$(VENVACTIVATE) $(PYTHON) setup.py sdist bdist_wheel
+cleanall: clean clean-pycache clean-venv
