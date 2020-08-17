@@ -36,7 +36,7 @@ jobs:
               run: |
                   pip install -U pip
                   pip install -r requirements.txt
-                  pip install isort black
+                  pip install isort==5.4.2 black==19.10b0
 
             - name: Install REL
               run: pip install -e .
