@@ -38,14 +38,31 @@ class Wikipedia:
         ent_name = self.wiki_redirect_ent_title(ent_name)
         return ent_name
 
+    def preprocess_ent_name_for_wiki_id_lookup(self, ent_name):
+        """
+        Preprocesses entity name for wikipedia id lookups. Since the
+        lookup map (wiki_name_id_map.txt) contains some special chars
+        as 'Johnson &amp; Johnson' and '&quot;Hello, World!&quot; program'
+        we need to preserve them from predicted entity names for lookups
+        to have successful match.
+
+        :return: Preprocessed entity name for wikipedia id lookups
+        """
+        ent_name = ent_name.strip()
+        ent_name = trim1(ent_name)
+        ent_name = ent_name.replace("_", " ")
+        ent_name = first_letter_to_uppercase(ent_name)
+
+        ent_name = self.wiki_redirect_ent_title(ent_name)
+        return ent_name
+
     def ent_wiki_id_from_name(self, entity):
         """
         Preprocesses entity name and verifies if it exists in our KB.
 
         :return: Returns wikiID.
         """
-
-        entity = self.preprocess_ent_name(entity)
+        entity = self.preprocess_ent_name_for_wiki_id_lookup(entity)
         if not entity or (entity not in self.wiki_id_name_map["ent_name_to_id"]):
             return -1
         else:
